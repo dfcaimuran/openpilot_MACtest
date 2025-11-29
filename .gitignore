@@ -1,4 +1,67 @@
-openpilot-venv/
+# --- Python ---
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+*.pyd
+*.pkl
+*.so
+*.egg-info/
+
+# Virtual environments
+venv/
+env/
+*.venv/
+openpilot-venv/
+*/openpilot-venv/
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+
+# --- Build artifacts ---
+build/
+dist/
+*.o
+*.a
+*.lo
+*.la
+*.ydd
+*.dSYM/
+
+# Tools / cache
+tools/plotjuggler/.cache/
+tools/lib/route_cache/
+tools/cabana/*.o
+tools/cabana/*.a
+
+# Bazel / SCons / C++ build outputs
+bazel-*/
+bazel-bin/
+bazel-out/
+bazel-genfiles/
+bazel-testlogs/
+*.o.d
+
+# Logs
 *.log
+*.out
+*.err
+
+# MacOS & Editor junk
+.DS_Store
+.vscode/
+.idea/
+Thumbs.db
+
+# --- Replay / routes ---
+*.bz2
+*.rlog
+*.raw
+*.idx
+
+# --- LFS filters (optional, no LFS in this repo now) ---
+*.bin
+*.weight
+*.weights
+*.onnx
+*.pb
+*.tflite
