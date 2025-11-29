@@ -22,6 +22,8 @@ from msgq.visionipc import VisionIpcClient, VisionStreamType
 os.environ['BASEDIR'] = BASEDIR
 
 ANGLE_SCALE = 5.0
+# UI scale factor for smaller screens (e.g., MacBook Air). Can be overridden with REPLAY_UI_SCALE env var.
+UI_SCALE = float(os.getenv("REPLAY_UI_SCALE", "0.75"))
 
 def ui_thread(addr):
   cv2.setNumThreads(1)
@@ -44,8 +46,11 @@ def ui_thread(addr):
     write_x = 645
     write_y = 970
 
+  # Render at full logical resolution, then scale down to fit smaller displays
+  window_size = (int(size[0] * UI_SCALE), int(size[1] * UI_SCALE))
   pygame.display.set_caption("openpilot debug UI")
-  screen = pygame.display.set_mode(size, pygame.DOUBLEBUF)
+  window = pygame.display.set_mode(window_size, pygame.DOUBLEBUF)
+  screen = pygame.surface.Surface(size)
 
   alert1_font = pygame.font.SysFont("arial", 30)
   alert2_font = pygame.font.SysFont("arial", 20)
@@ -211,6 +216,10 @@ def ui_thread(addr):
     for i, line in enumerate(lines):
       if line is not None:
         screen.blit(line, (write_x, write_y + i * SPACING))
+
+    # Scale the full render surface down to the window size
+    scaled_screen = pygame.transform.smoothscale(screen, window.get_size())
+    window.blit(scaled_screen, (0, 0))
 
     # this takes time...vsync or something
     pygame.display.flip()

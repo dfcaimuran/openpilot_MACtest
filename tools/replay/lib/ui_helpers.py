@@ -10,6 +10,10 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg
 from openpilot.common.transformations.camera import get_view_frame_from_calib_frame
 from openpilot.selfdrive.controls.radard import RADAR_TO_CAMERA
 
+import os
+UI_SCALE = float(os.getenv("REPLAY_UI_SCALE", "0.75"))
+PLOT_WIDTH_SCALE = float(os.getenv("REPLAY_PLOT_WIDTH_SCALE", "0.8"))
+
 
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
@@ -100,7 +104,17 @@ def init_plots(arr, name_to_arr_idx, plot_xlims, plot_ylims, plot_names, plot_co
                     "m": (1, 0, 1)}
 
   dpi = 90
-  fig = plt.figure(figsize=(575 / dpi, 600 / dpi), dpi=dpi)
+  base_width_px = 575
+  base_height_px = 600
+
+  # Make plots narrower horizontally to better fit scaled UI on smaller screens
+  fig = plt.figure(
+    figsize=(
+      (base_width_px * UI_SCALE * PLOT_WIDTH_SCALE) / dpi,
+      (base_height_px * UI_SCALE) / dpi,
+    ),
+    dpi=dpi,
+  )
   canvas = FigureCanvasAgg(fig)
 
   fig.set_facecolor((0.2, 0.2, 0.2))
